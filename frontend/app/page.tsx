@@ -6,9 +6,10 @@ export default function Home() {
     <div>
 
       <h1 className="text-3xl font-bold mb-8">
-
-        Dashboard
-
+        <PageHeader
+          title="Dashboard"
+          subtitle="Unified AI Powered DevOps Control Center"
+        />
       </h1>
 
       <div className="grid grid-cols-4 gap-6">
@@ -33,10 +34,7 @@ export default function Home() {
           value="0"
         />
 
-        <PageHeader
-          title="Dashboard"
-          subtitle="Unified AI Powered DevOps Control Center"
-        />
+
 
       </div>
 
