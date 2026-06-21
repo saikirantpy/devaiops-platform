@@ -1,9 +1,11 @@
 type Props = {
+  status: string;
   backend: string;
   environment: string;
 };
 
 export default function DashboardStatus({
+  status,
   backend,
   environment,
 }: Props) {
@@ -15,6 +17,8 @@ export default function DashboardStatus({
         Platform Status
 
       </h2>
+
+      <p>Status: {status}</p>
 
       <p>Backend: {backend}</p>
 
