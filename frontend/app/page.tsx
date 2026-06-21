@@ -1,19 +1,39 @@
+import DashboardCard from "@/components/dashboard/DashboardCard";
+
 export default function Home() {
   return (
-    <main>
-      <h1>🚀 DevAIOps Platform</h1>
+    <div>
 
-      <p>
-        Unified AI Powered DevOps, Container and Kubernetes Control Center
-      </p>
+      <h1 className="text-3xl font-bold mb-8">
 
-      <ul>
-        <li>Dashboard</li>
-        <li>Containers</li>
-        <li>Kubernetes</li>
-        <li>Monitoring</li>
-        <li>AI Copilot</li>
-      </ul>
-    </main>
+        Dashboard
+
+      </h1>
+
+      <div className="grid grid-cols-4 gap-6">
+
+        <DashboardCard
+          title="Health Score"
+          value="98%"
+        />
+
+        <DashboardCard
+          title="Containers"
+          value="0"
+        />
+
+        <DashboardCard
+          title="Pods"
+          value="0"
+        />
+
+        <DashboardCard
+          title="Alerts"
+          value="0"
+        />
+
+      </div>
+
+    </div>
   );
 }
