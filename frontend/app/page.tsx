@@ -1,4 +1,5 @@
 import DashboardCard from "@/components/dashboard/DashboardCard";
+import PageHeader from "@/components/shared/PageHeader";
 
 export default function Home() {
   return (
@@ -30,6 +31,11 @@ export default function Home() {
         <DashboardCard
           title="Alerts"
           value="0"
+        />
+
+        <PageHeader
+          title="Dashboard"
+          subtitle="Unified AI Powered DevOps Control Center"
         />
 
       </div>
