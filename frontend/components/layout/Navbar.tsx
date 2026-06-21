@@ -1,3 +1,5 @@
+import EnvironmentBadge from "@/components/shared/EnvironmentBadge";
+
 export default function Navbar() {
   return (
     <nav className="h-16 border-b flex items-center justify-between px-6">
@@ -8,11 +10,7 @@ export default function Navbar() {
 
       </h1>
 
-      <div>
-
-        Local Environment
-
-      </div>
+      <EnvironmentBadge />
 
     </nav>
   );
