@@ -1,20 +1,20 @@
-import StatusBadge from "@/components/shared/StatusBadge";
-
-type Pod = {
+type Deployment = {
   namespace: string;
   name: string;
-  status: string;
-  node: string;
+  ready: string;
+  replicas: number;
 };
 
 type Props = {
-  pods: Pod[];
+  deployments: Deployment[];
 };
 
-export default function PodsTable({
-  pods,
+export default function DeploymentsTable({
+  deployments,
 }: Props) {
+
   return (
+
     <table className="w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
 
       <thead className="bg-gray-100">
@@ -22,19 +22,27 @@ export default function PodsTable({
         <tr>
 
           <th className="border px-4 py-3 text-left">
+
             Namespace
+
           </th>
 
           <th className="border px-4 py-3 text-left">
-            Pod Name
+
+            Deployment
+
           </th>
 
           <th className="border px-4 py-3 text-left">
-            Status
+
+            Ready
+
           </th>
 
           <th className="border px-4 py-3 text-left">
-            Node
+
+            Replicas
+
           </th>
 
         </tr>
@@ -43,36 +51,36 @@ export default function PodsTable({
 
       <tbody>
 
-        {pods.map((pod) => (
+        {deployments.map((deployment) => (
 
-        <tr
-            key={`${pod.namespace}-${pod.name}`}
+          <tr
+            key={`${deployment.namespace}-${deployment.name}`}
             className="hover:bg-gray-50 transition-colors"
-        >
+          >
 
             <td className="border px-4 py-3 text-left">
 
-              {pod.namespace}
+              {deployment.namespace}
 
             </td>
 
             <td className="border px-4 py-3 text-left">
 
-              {pod.name}
+              {deployment.name}
 
             </td>
 
             <td className="border px-4 py-3 text-left">
 
-              <StatusBadge
-                status={pod.status}
-              />
+            {deployment.ready.startsWith("0/")
+                ? "🔴 " + deployment.ready
+                : "🟢 " + deployment.ready}
 
             </td>
 
             <td className="border px-4 py-3 text-left">
 
-              {pod.node}
+              {deployment.replicas}
 
             </td>
 
@@ -83,5 +91,6 @@ export default function PodsTable({
       </tbody>
 
     </table>
+
   );
 }

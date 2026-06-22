@@ -41,7 +41,7 @@ export default function KubernetesPage() {
 
   return (
 
-    <div>
+    <div className="space-y-8">
 
       <PageHeader
         title="Kubernetes"

@@ -45,7 +45,10 @@ export default function ContainersTable({
 
         {containers.map((container) => (
 
-          <tr key={container.id}>
+        <tr
+            key={container.id}
+            className="hover:bg-gray-50 transition-colors"
+        >
 
             <td className="border px-4 py-3 text-left">
 

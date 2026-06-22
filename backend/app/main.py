@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.health import router as health_router
 from app.api.docker import router as docker_router
 from app.api.kubernetes import router as kubernetes_router
+from app.api.deployments import router as deployments_router
 
 app = FastAPI(
     title="DevAIOps Platform"
@@ -25,9 +26,12 @@ app.include_router(docker_router)
 
 app.include_router(kubernetes_router)
 
+app.include_router(deployments_router)
+
 
 @app.get("/")
 def root():
+
     return {
         "message": "DevAIOps Backend Running"
     }

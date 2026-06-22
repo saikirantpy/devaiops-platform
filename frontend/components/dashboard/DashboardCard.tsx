@@ -8,7 +8,7 @@ export default function DashboardCard({
   value,
 }: DashboardCardProps) {
   return (
-    <div className="border rounded-xl p-6 shadow-sm">
+    <div className="border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
 
       <h3 className="text-sm text-gray-500">
 

@@ -37,3 +37,34 @@ def get_pods():
         )
 
     return pod_list
+
+
+def get_deployments():
+
+    config.load_kube_config()
+
+    apps_v1 = client.AppsV1Api()
+
+    deployments = apps_v1.list_deployment_for_all_namespaces()
+
+    deployment_list = []
+
+    for deployment in deployments.items:
+
+        ready = deployment.status.ready_replicas or 0
+
+        replicas = deployment.spec.replicas or 0
+
+        deployment_list.append(
+            {
+                "namespace": deployment.metadata.namespace,
+
+                "name": deployment.metadata.name,
+
+                "ready": f"{ready}/{replicas}",
+
+                "replicas": replicas,
+            }
+        )
+
+    return deployment_list
