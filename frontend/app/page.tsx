@@ -8,6 +8,7 @@ import PageHeader from "@/components/shared/PageHeader";
 
 import { getHealth } from "@/services/backend";
 import { getDocker } from "@/services/docker";
+import { getKubernetes } from "@/services/kubernetes";
 
 export default function Home() {
   const [health, setHealth] = useState({
@@ -17,6 +18,7 @@ export default function Home() {
   });
 
   const [dockerCount, setDockerCount] = useState("0");
+  const [podCount, setPodCount] = useState("0");
 
   useEffect(() => {
     async function loadHealth() {
@@ -53,9 +55,25 @@ export default function Home() {
       }
     }
 
+    async function loadKubernetes() {
+      try {
+        const data = await getKubernetes();
+
+        setPodCount(
+          String(data.pod_count)
+        );
+      } catch (error) {
+        console.error(error);
+
+        setPodCount("Error");
+      }
+    }
+
     loadHealth();
 
     loadDocker();
+
+    loadKubernetes();
   }, []);
 
   return (
@@ -80,7 +98,7 @@ export default function Home() {
 
         <DashboardCard
           title="Pods"
-          value="0"
+          value={podCount}
         />
 
         <DashboardCard
