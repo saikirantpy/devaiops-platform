@@ -1,4 +1,4 @@
-type PageHeaderProps = {
+type Props = {
   title: string;
   subtitle: string;
 };
@@ -6,7 +6,7 @@ type PageHeaderProps = {
 export default function PageHeader({
   title,
   subtitle,
-}: PageHeaderProps) {
+}: Props) {
   return (
     <div className="mb-8">
 
@@ -16,7 +16,7 @@ export default function PageHeader({
 
       </h1>
 
-      <p className="text-gray-500 mt-2">
+      <p className="text-gray-500 mt-1">
 
         {subtitle}
 

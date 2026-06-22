@@ -1,20 +1,58 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 import PageHeader from "@/components/shared/PageHeader";
-import EmptyState from "@/components/shared/EmptyState";
+
+import PodsTable from "@/components/tables/PodsTable";
+
+import {
+  getPods,
+  Pod,
+} from "@/services/pods";
 
 export default function KubernetesPage() {
+
+  const [pods, setPods] =
+    useState<Pod[]>([]);
+
+  useEffect(() => {
+
+    async function loadPods() {
+
+      try {
+
+        const data =
+          await getPods();
+
+        setPods(data);
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    loadPods();
+
+  }, []);
+
   return (
+
     <div>
 
       <PageHeader
         title="Kubernetes"
-        subtitle="Manage Kubernetes resources"
+        subtitle="Pod Inventory"
       />
 
-      <EmptyState
-        title="No Cluster Connected"
-        description="Kubernetes integration will appear here."
+      <PodsTable
+        pods={pods}
       />
 
     </div>
+
   );
 }
