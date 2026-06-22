@@ -7,6 +7,7 @@ import DashboardStatus from "@/components/dashboard/DashboardStatus";
 import PageHeader from "@/components/shared/PageHeader";
 
 import { getHealth } from "@/services/backend";
+import { getDocker } from "@/services/docker";
 
 export default function Home() {
   const [health, setHealth] = useState({
@@ -14,6 +15,8 @@ export default function Home() {
     environment: "Loading...",
     backend: "Loading...",
   });
+
+  const [dockerCount, setDockerCount] = useState("0");
 
   useEffect(() => {
     async function loadHealth() {
@@ -36,7 +39,23 @@ export default function Home() {
       }
     }
 
+    async function loadDocker() {
+      try {
+        const data = await getDocker();
+
+        setDockerCount(
+          String(data.container_count)
+        );
+      } catch (error) {
+        console.error(error);
+
+        setDockerCount("Error");
+      }
+    }
+
     loadHealth();
+
+    loadDocker();
   }, []);
 
   return (
@@ -49,13 +68,25 @@ export default function Home() {
 
       <div className="grid grid-cols-4 gap-6 mb-8">
 
-        <DashboardCard title="Health Score" value="98%" />
+        <DashboardCard
+          title="Health Score"
+          value="98%"
+        />
 
-        <DashboardCard title="Containers" value="0" />
+        <DashboardCard
+          title="Containers"
+          value={dockerCount}
+        />
 
-        <DashboardCard title="Pods" value="0" />
+        <DashboardCard
+          title="Pods"
+          value="0"
+        />
 
-        <DashboardCard title="Alerts" value="0" />
+        <DashboardCard
+          title="Alerts"
+          value="0"
+        />
 
       </div>
 
