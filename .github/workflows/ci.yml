@@ -1,0 +1,92 @@
+name: DevAIOps CI
+
+on:
+
+  push:
+
+    branches:
+
+      - main
+
+  pull_request:
+
+    branches:
+
+      - main
+
+
+jobs:
+
+  backend:
+
+    runs-on: ubuntu-latest
+
+    defaults:
+
+      run:
+
+        working-directory: backend
+
+    steps:
+
+      - name: Checkout Repository
+
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+
+        uses: actions/setup-python@v5
+
+        with:
+
+          python-version: "3.13"
+
+      - name: Install Dependencies
+
+        run: |
+
+          pip install -r requirements.txt
+
+      - name: Validate Backend
+
+        run: |
+
+          python -m compileall app
+
+
+
+  frontend:
+
+    runs-on: ubuntu-latest
+
+    defaults:
+
+      run:
+
+        working-directory: frontend
+
+    steps:
+
+      - name: Checkout Repository
+
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+
+        uses: actions/setup-node@v4
+
+        with:
+
+          node-version: "22"
+
+      - name: Install Dependencies
+
+        run: |
+
+          npm ci
+
+      - name: Build Frontend
+
+        run: |
+
+          npm run build
