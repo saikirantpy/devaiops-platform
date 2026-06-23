@@ -1,9 +1,16 @@
 from kubernetes import client, config
 
 
+def load_cluster_config():
+
+    config.load_kube_config(
+        config_file="/root/.kube/docker-config"
+    )
+
+
 def get_pod_count():
 
-    config.load_kube_config()
+    load_cluster_config()
 
     v1 = client.CoreV1Api()
 
@@ -14,7 +21,7 @@ def get_pod_count():
 
 def get_pods():
 
-    config.load_kube_config()
+    load_cluster_config()
 
     v1 = client.CoreV1Api()
 
@@ -41,37 +48,50 @@ def get_pods():
 
 def get_deployments():
 
-    config.load_kube_config()
+    load_cluster_config()
 
     apps_v1 = client.AppsV1Api()
 
-    deployments = apps_v1.list_deployment_for_all_namespaces()
+    deployments = (
+        apps_v1.list_deployment_for_all_namespaces()
+    )
 
     deployment_list = []
 
     for deployment in deployments.items:
 
-        ready = deployment.status.ready_replicas or 0
+        ready = (
+            deployment.status.ready_replicas
+            or 0
+        )
 
-        replicas = deployment.spec.replicas or 0
+        replicas = (
+            deployment.spec.replicas
+            or 0
+        )
 
         deployment_list.append(
             {
-                "namespace": deployment.metadata.namespace,
+                "namespace":
+                    deployment.metadata.namespace,
 
-                "name": deployment.metadata.name,
+                "name":
+                    deployment.metadata.name,
 
-                "ready": f"{ready}/{replicas}",
+                "ready":
+                    f"{ready}/{replicas}",
 
-                "replicas": replicas,
+                "replicas":
+                    replicas,
             }
         )
 
     return deployment_list
 
+
 def get_monitoring():
 
-    config.load_kube_config()
+    load_cluster_config()
 
     v1 = client.CoreV1Api()
 
@@ -79,7 +99,9 @@ def get_monitoring():
 
     pods = v1.list_pod_for_all_namespaces()
 
-    deployments = apps_v1.list_deployment_for_all_namespaces()
+    deployments = (
+        apps_v1.list_deployment_for_all_namespaces()
+    )
 
     pending_pods = 0
 
@@ -93,9 +115,15 @@ def get_monitoring():
 
     for deployment in deployments.items:
 
-        ready = deployment.status.ready_replicas or 0
+        ready = (
+            deployment.status.ready_replicas
+            or 0
+        )
 
-        replicas = deployment.spec.replicas or 0
+        replicas = (
+            deployment.spec.replicas
+            or 0
+        )
 
         if ready < replicas:
 
@@ -107,16 +135,18 @@ def get_monitoring():
 
         "pending_pods": pending_pods,
 
-        "unhealthy_deployments": unhealthy_deployments,
+        "unhealthy_deployments":
+            unhealthy_deployments,
 
-        "total_deployments": len(
-            deployments.items
-        ),
+        "total_deployments":
+            len(deployments.items),
 
     }
+
+
 def get_diagnostics():
 
-    config.load_kube_config()
+    load_cluster_config()
 
     apps_v1 = client.AppsV1Api()
 
@@ -158,6 +188,7 @@ def get_diagnostics():
 
     return issues
 
+
 def get_copilot_answer(question):
 
     question = question.lower()
@@ -167,6 +198,7 @@ def get_copilot_answer(question):
     diagnostics = get_diagnostics()
 
     if (
+
         "unhealthy" in question
 
         or
@@ -176,6 +208,7 @@ def get_copilot_answer(question):
         or
 
         "issue" in question
+
     ):
 
         answer = []
@@ -209,11 +242,13 @@ def get_copilot_answer(question):
         return "\n".join(answer)
 
     elif (
+
         "cluster" in question
 
         or
 
         "summary" in question
+
     ):
 
         return (
@@ -227,11 +262,13 @@ def get_copilot_answer(question):
         )
 
     elif (
+
         "fix" in question
 
         or
 
         "priority" in question
+
     ):
 
         if diagnostics:
@@ -257,4 +294,5 @@ def get_copilot_answer(question):
         "- What is running in my cluster?\n"
 
         "- What should I fix first?"
+
     )

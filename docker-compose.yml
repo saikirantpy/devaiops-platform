@@ -1,0 +1,47 @@
+services:
+
+  backend:
+
+    build:
+
+      context: ./backend
+
+    container_name: devaiops-backend
+
+    restart: unless-stopped
+
+    ports:
+
+      - "8001:8000"
+
+    volumes:
+
+      - /var/run/docker.sock:/var/run/docker.sock
+
+      - /Users/saikiranthummanapally/.kube:/root/.kube
+
+      - /Users/saikiranthummanapally/.minikube:/root/.minikube
+
+      - /Users/saikiranthummanapally/.kube/docker-config:/root/.kube/docker-config
+
+  frontend:
+
+    build:
+
+      context: ./frontend
+
+    container_name: devaiops-frontend
+
+    restart: unless-stopped
+
+    ports:
+
+      - "3001:3000"
+
+    environment:
+
+      - NEXT_PUBLIC_API_URL=http://localhost:8001
+
+    depends_on:
+
+      - backend
