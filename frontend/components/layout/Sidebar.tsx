@@ -1,35 +1,149 @@
+"use client";
+
 import Link from "next/link";
 
+import { usePathname }
+from "next/navigation";
+
 const menuItems = [
-  { name: "Dashboard", href: "/" },
-  { name: "Containers", href: "/containers" },
-  { name: "Deployments", href: "/deployments" },
-  { name: "Kubernetes", href: "/kubernetes" },
-  { name: "Monitoring", href: "/monitoring" },
-  { name: "Logs", href: "/logs" },
-  { name: "AI Copilot", href: "/ai-copilot" },
-  { name: "Notifications", href: "/notifications" },
-  { name: "Integrations", href: "/integrations" },
-  { name: "Settings", href: "/settings" },
+
+  {
+    icon: "🏠",
+    name: "Dashboard",
+    href: "/",
+  },
+
+  {
+    icon: "🐳",
+    name: "Containers",
+    href: "/containers",
+  },
+
+  {
+    icon: "☸️",
+    name: "Kubernetes",
+    href: "/kubernetes",
+  },
+
+  {
+    icon: "🚀",
+    name: "Deployments",
+    href: "/deployments",
+  },
+
+  {
+    icon: "📈",
+    name: "Monitoring",
+    href: "/monitoring",
+  },
+
+  {
+    icon: "📄",
+    name: "Logs",
+    href: "/logs",
+  },
+
+  {
+    icon: "🤖",
+    name: "AI Copilot",
+    href: "/ai-copilot",
+  },
+
+  {
+    icon: "🔔",
+    name: "Notifications",
+    href: "/notifications",
+  },
+
+  {
+    icon: "🔗",
+    name: "Integrations",
+    href: "/integrations",
+  },
+
+  {
+    icon: "⚙️",
+    name: "Settings",
+    href: "/settings",
+  },
+
 ];
 
 export default function Sidebar() {
+
+  const pathname =
+    usePathname();
+
   return (
-    <aside className="w-64 border-r h-screen p-6">
-      <h2 className="text-2xl font-bold mb-10">
+
+    <aside
+
+      className="
+        w-72
+        border-r
+        h-screen
+        p-6
+        bg-white
+        shadow-sm
+      "
+
+    >
+
+      <h2 className="text-3xl font-bold mb-10">
+
         🚀 DevAIOps
+
       </h2>
 
       <nav>
-        <ul className="space-y-4">
+
+        <ul className="space-y-2">
 
           {menuItems.map((item) => (
 
             <li key={item.name}>
 
-              <Link href={item.href}>
+              <Link
 
-                {item.name}
+                href={item.href}
+
+                className={`
+
+                  flex
+
+                  items-center
+
+                  gap-3
+
+                  p-3
+
+                  rounded-lg
+
+                  transition-colors
+
+                  ${
+                    pathname === item.href
+
+                      ? "bg-blue-100 text-blue-700 font-semibold"
+
+                      : "hover:bg-gray-100"
+                  }
+
+                `}
+
+              >
+
+                <span>
+
+                  {item.icon}
+
+                </span>
+
+                <span>
+
+                  {item.name}
+
+                </span>
 
               </Link>
 
@@ -38,7 +152,11 @@ export default function Sidebar() {
           ))}
 
         </ul>
+
       </nav>
+
     </aside>
+
   );
+
 }
