@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 
 import PageHeader from "@/components/shared/PageHeader";
 
+import EmptyState from "@/components/shared/EmptyState";
+
+import SearchBox from "@/components/shared/SearchBox";
+
 import DeploymentsTable from "@/components/tables/DeploymentsTable";
 
 import {
@@ -15,6 +19,9 @@ export default function DeploymentsPage() {
 
   const [deployments, setDeployments] =
     useState<Deployment[]>([]);
+
+  const [search, setSearch] =
+    useState("");
 
   useEffect(() => {
 
@@ -39,20 +46,74 @@ export default function DeploymentsPage() {
 
   }, []);
 
+  const filteredDeployments =
+
+    deployments.filter(
+
+      (deployment) =>
+
+        deployment.name
+
+          .toLowerCase()
+
+          .includes(
+
+            search.toLowerCase()
+
+          )
+
+    );
+
   return (
 
     <div className="space-y-8">
 
       <PageHeader
+
         title="Deployments"
+
         subtitle="Kubernetes Deployment Inventory"
+
       />
 
-      <DeploymentsTable
-        deployments={deployments}
+      <SearchBox
+
+        value={search}
+
+        onChange={setSearch}
+
       />
+
+{
+
+  filteredDeployments.length === 0
+
+  ? (
+
+    <EmptyState
+
+      title="No Deployments Found"
+
+      description="Try another search keyword."
+
+    />
+
+  )
+
+  : (
+
+    <DeploymentsTable
+
+      deployments={filteredDeployments}
+
+    />
+
+  )
+
+}
 
     </div>
 
   );
+
 }

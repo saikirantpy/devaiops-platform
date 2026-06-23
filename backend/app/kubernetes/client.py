@@ -157,3 +157,104 @@ def get_diagnostics():
             )
 
     return issues
+
+def get_copilot_answer(question):
+
+    question = question.lower()
+
+    monitoring = get_monitoring()
+
+    diagnostics = get_diagnostics()
+
+    if (
+        "unhealthy" in question
+
+        or
+
+        "problem" in question
+
+        or
+
+        "issue" in question
+    ):
+
+        answer = []
+
+        answer.append(
+
+            f"Pending Pods: {monitoring['pending_pods']}"
+
+        )
+
+        answer.append(
+
+            f"Unhealthy Deployments: {monitoring['unhealthy_deployments']}"
+
+        )
+
+        for item in diagnostics:
+
+            answer.append(
+
+                f"{item['name']} : {item['message']}"
+
+            )
+
+        answer.append(
+
+            "Suggestion: Inspect pod events and deployment status"
+
+        )
+
+        return "\n".join(answer)
+
+    elif (
+        "cluster" in question
+
+        or
+
+        "summary" in question
+    ):
+
+        return (
+
+            f"Cluster Status: {monitoring['cluster_status']}\n"
+
+            f"Pending Pods: {monitoring['pending_pods']}\n"
+
+            f"Deployments: {monitoring['total_deployments']}"
+
+        )
+
+    elif (
+        "fix" in question
+
+        or
+
+        "priority" in question
+    ):
+
+        if diagnostics:
+
+            item = diagnostics[0]
+
+            return (
+
+                f"Fix {item['name']} first.\n"
+
+                f"{item['message']}"
+
+            )
+
+        return "No critical issues found."
+
+    return (
+
+        "Try asking:\n"
+
+        "- Why is my application unhealthy?\n"
+
+        "- What is running in my cluster?\n"
+
+        "- What should I fix first?"
+    )
