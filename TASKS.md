@@ -55,3 +55,25 @@
 [ ] Terraform
 
 [ ] AWS Deployment
+
+
+
+UI
+☑ Sticky sidebar
+☑ Dashboard cards
+☑ Prometheus cards
+☑ Charts
+
+NEXT
+
+☐ Grafana integration
+☐ Logs page
+☐ Notifications page
+☐ Integrations page
+☐ Settings page
+☐ Dashboard refactoring
+☐ Animations
+
+Grafana Password:
+admin
+lQaqfUscSHKQO5UCL3ctT69rMlsTSIChhAxI6ZMr

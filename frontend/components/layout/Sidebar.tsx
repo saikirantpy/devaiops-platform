@@ -37,6 +37,12 @@ const menuItems = [
     href: "/monitoring",
   },
 
+    {
+    icon: "📈",
+    name: "Grafana",
+    href: "/grafana",
+  },
+
   {
     icon: "📄",
     name: "Logs",
