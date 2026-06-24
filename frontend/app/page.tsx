@@ -15,6 +15,10 @@ import { getKubernetes } from "@/services/kubernetes";
 import { getMonitoring } from "@/services/monitoring";
 import { getDiagnostics } from "@/services/diagnostics";
 import { getPrometheus } from "@/services/prometheus";
+import ResourceChart
+from "@/components/charts/ResourceChart";
+import InfrastructureChart
+from "@/components/charts/InfrastructureChart";
 
 type Diagnostic = {
   namespace: string;
@@ -411,11 +415,62 @@ export default function Home() {
 
       />
 
+      <div
+
+ className="grid lg:grid-cols-2 gap-6"
+
+>
+
+ <ResourceChart
+
+  cpu={
+
+   prometheus.cpu_usage
+
+  }
+
+  memory={
+
+   prometheus.memory_usage
+
+  }
+
+/>
+
+ <InfrastructureChart
+
+  nodes={
+
+   prometheus.nodes
+
+  }
+
+  pods={
+
+   Number(
+
+    podCount
+
+   )
+
+  }
+
+  deployments={
+
+   monitoring.total_deployments
+
+  }
+
+/>
+
+</div>
+
       <DiagnosticsCard
 
         diagnostics={diagnostics}
 
       />
+      
 
     </div>
 

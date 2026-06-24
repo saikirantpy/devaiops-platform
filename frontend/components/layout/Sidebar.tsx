@@ -77,16 +77,15 @@ export default function Sidebar() {
   return (
 
     <aside
-
       className="
-        w-72
-        border-r
-        h-screen
-        p-6
-        bg-white
-        shadow-sm
+      w-72
+      h-screen
+      sticky
+      top-0
+      border-r
+      overflow-y-auto
+      flex-shrink-0
       "
-
     >
 
       <h2 className="text-3xl font-bold mb-10">

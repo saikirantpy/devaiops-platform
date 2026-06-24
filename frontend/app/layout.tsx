@@ -67,7 +67,7 @@ export default function RootLayout({
 
             <Navbar />
 
-            <main className="flex-1 p-8 overflow-auto">
+            <main className="flex-1 overflow-y-auto p-8">
 
               {children}
 
