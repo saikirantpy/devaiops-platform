@@ -12,6 +12,9 @@ from app.api.diagnostics import (
     router as diagnostics_router
 )
 
+from app.api.prometheus import (
+    router as prometheus_router
+)
 
 app = FastAPI(
     title="DevAIOps Platform"
@@ -52,6 +55,10 @@ app.include_router(
 
 app.include_router(
   copilot_router
+)
+
+app.include_router(
+    prometheus_router
 )
 
 @app.get("/")

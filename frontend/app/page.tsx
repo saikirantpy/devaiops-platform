@@ -14,6 +14,7 @@ import { getDocker } from "@/services/docker";
 import { getKubernetes } from "@/services/kubernetes";
 import { getMonitoring } from "@/services/monitoring";
 import { getDiagnostics } from "@/services/diagnostics";
+import { getPrometheus } from "@/services/prometheus";
 
 type Diagnostic = {
   namespace: string;
@@ -25,18 +26,25 @@ type Diagnostic = {
 export default function Home() {
 
   const [health, setHealth] = useState({
+
     status: "Loading...",
+
     environment: "Loading...",
+
     backend: "Loading...",
+
   });
 
   const [dockerCount, setDockerCount] =
+
     useState("0");
 
   const [podCount, setPodCount] =
+
     useState("0");
 
   const [monitoring, setMonitoring] =
+
     useState({
 
       cluster_status: "Loading...",
@@ -50,7 +58,24 @@ export default function Home() {
     });
 
   const [diagnostics, setDiagnostics] =
+
     useState<Diagnostic[]>([]);
+
+  const [
+
+    prometheus,
+
+    setPrometheus
+
+  ] = useState({
+
+    nodes: 0,
+
+    cpu_usage: 0,
+
+    memory_usage: 0,
+
+  });
 
   useEffect(() => {
 
@@ -59,6 +84,7 @@ export default function Home() {
       try {
 
         const data =
+
           await getHealth();
 
         setHealth({
@@ -66,14 +92,18 @@ export default function Home() {
           status: data.status,
 
           environment:
+
             data.environment,
 
           backend:
+
             data.backend,
 
         });
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(error);
 
@@ -82,9 +112,11 @@ export default function Home() {
           status: "Unavailable",
 
           environment:
+
             "Unknown",
 
           backend:
+
             "Disconnected",
 
         });
@@ -98,22 +130,29 @@ export default function Home() {
       try {
 
         const data =
+
           await getDocker();
 
         setDockerCount(
 
           String(
+
             data.container_count
+
           )
 
         );
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(error);
 
         setDockerCount(
+
           "Error"
+
         );
 
       }
@@ -125,22 +164,29 @@ export default function Home() {
       try {
 
         const data =
+
           await getKubernetes();
 
         setPodCount(
 
           String(
+
             data.pod_count
+
           )
 
         );
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(error);
 
         setPodCount(
+
           "Error"
+
         );
 
       }
@@ -152,13 +198,18 @@ export default function Home() {
       try {
 
         const data =
+
           await getMonitoring();
 
         setMonitoring(
+
           data
+
         );
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(error);
 
@@ -175,10 +226,38 @@ export default function Home() {
           await getDiagnostics();
 
         setDiagnostics(
+
           data
+
         );
 
-      } catch (error) {
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    async function loadPrometheus() {
+
+      try {
+
+        const data =
+
+          await getPrometheus();
+
+        setPrometheus(
+
+          data
+
+        );
+
+      }
+
+      catch (error) {
 
         console.error(error);
 
@@ -196,6 +275,8 @@ export default function Home() {
 
     loadDiagnostics();
 
+    loadPrometheus();
+
   }, []);
 
   return (
@@ -210,7 +291,11 @@ export default function Home() {
 
       />
 
-      <div className="grid grid-cols-4 gap-6">
+      <div
+
+        className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-6"
+
+      >
 
         <DashboardCard
 
@@ -245,6 +330,42 @@ export default function Home() {
             monitoring.pending_pods +
 
             monitoring.unhealthy_deployments
+
+          )}
+
+        />
+
+        <DashboardCard
+
+          title="CPU"
+
+          value={`${
+
+            prometheus.cpu_usage
+
+          }%`}
+
+        />
+
+        <DashboardCard
+
+          title="Memory"
+
+          value={`${
+
+            prometheus.memory_usage
+
+          }%`}
+
+        />
+
+        <DashboardCard
+
+          title="Nodes"
+
+          value={String(
+
+            prometheus.nodes
 
           )}
 
