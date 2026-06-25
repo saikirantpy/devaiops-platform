@@ -7,7 +7,7 @@ from app.api.docker import router as docker_router
 from app.api.kubernetes import router as kubernetes_router
 from app.api.deployments import router as deployments_router
 from app.api.copilot import router as copilot_router
-
+from app.api.logs import router as logs_router
 from app.api.diagnostics import (
     router as diagnostics_router
 )
@@ -59,6 +59,10 @@ app.include_router(
 
 app.include_router(
     prometheus_router
+)
+
+app.include_router(
+    logs_router
 )
 
 @app.get("/")

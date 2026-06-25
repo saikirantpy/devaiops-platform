@@ -37,8 +37,8 @@ const menuItems = [
     href: "/monitoring",
   },
 
-    {
-    icon: "📈",
+  {
+    icon: "📊",
     name: "Grafana",
     href: "/grafana",
   },
@@ -88,17 +88,43 @@ export default function Sidebar() {
       h-screen
       sticky
       top-0
-      border-r
-      overflow-y-auto
       flex-shrink-0
+
+      bg-white
+
+      dark:bg-gray-900
+
+      border-r
+
+      border-gray-200
+
+      dark:border-gray-800
+
+      overflow-y-auto
+
+      px-6
+
+      py-8
+
+      shadow-sm
       "
     >
 
-      <h2 className="text-3xl font-bold mb-10">
+      <div className="mb-10">
 
-        🚀 DevAIOps
+        <h2 className="text-3xl font-bold">
 
-      </h2>
+          🚀 DevAIOps
+
+        </h2>
+
+        <p className="text-sm text-gray-500 mt-2">
+
+          AI Powered DevOps Control Center
+
+        </p>
+
+      </div>
 
       <nav>
 
@@ -129,9 +155,9 @@ export default function Sidebar() {
                   ${
                     pathname === item.href
 
-                      ? "bg-blue-100 text-blue-700 font-semibold"
+                      ? "bg-blue-100 text-blue-700 font-semibold shadow-sm"
 
-                      : "hover:bg-gray-100"
+                      : "text-gray-600 hover:bg-gray-100 hover:translate-x-1"
                   }
 
                 `}
