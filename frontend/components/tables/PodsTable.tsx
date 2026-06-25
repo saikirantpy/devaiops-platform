@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import StatusBadge from "@/components/shared/StatusBadge";
 
 type Pod = {
@@ -45,24 +47,42 @@ export default function PodsTable({
 
         {pods.map((pod) => (
 
-        <tr
+          <tr
             key={`${pod.namespace}-${pod.name}`}
             className="hover:bg-gray-50 transition-colors"
-        >
+          >
 
-            <td className="border px-4 py-3 text-left">
+            <td className="border px-4 py-3">
 
               {pod.namespace}
 
             </td>
 
-            <td className="border px-4 py-3 text-left">
+            <td className="border px-4 py-3">
 
-              {pod.name}
+              <Link
+                href={`/pods/${pod.namespace}/${pod.name}`}
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  text-blue-600
+                  hover:text-blue-800
+                  hover:underline
+                  font-medium
+                  transition-colors
+                "
+              >
+
+                🔍
+
+                {pod.name}
+
+              </Link>
 
             </td>
 
-            <td className="border px-4 py-3 text-left">
+            <td className="border px-4 py-3">
 
               <StatusBadge
                 status={pod.status}
@@ -70,7 +90,7 @@ export default function PodsTable({
 
             </td>
 
-            <td className="border px-4 py-3 text-left">
+            <td className="border px-4 py-3">
 
               {pod.node}
 
