@@ -1,36 +1,26 @@
 "use client";
 
-import { useEffect, useState }
+import { useEffect, useState } from "react";
 
-from "react";
-
-import PageHeader
-
-from "@/components/shared/PageHeader";
+import PageHeader from "@/components/shared/PageHeader";
 
 import {
-
   getPrometheus,
-
+  PrometheusResponse,
 } from "@/services/prometheus";
 
 export default function PrometheusPage() {
 
-  const [
+  const [metrics, setMetrics] =
+    useState<PrometheusResponse>({
 
-    metrics,
+      nodes: 0,
 
-    setMetrics
+      cpu_usage: 0,
 
-  ] = useState({
+      memory_usage: 0,
 
-    pods: 0,
-
-    deployments: 0,
-
-    nodes: 0,
-
-  });
+    });
 
   useEffect(() => {
 
@@ -39,7 +29,6 @@ export default function PrometheusPage() {
       try {
 
         const data =
-
           await getPrometheus();
 
         setMetrics(data);
@@ -61,22 +50,19 @@ export default function PrometheusPage() {
     <div className="space-y-8">
 
       <PageHeader
-
         title="Prometheus"
-
         subtitle="Cluster Metrics"
-
       />
 
       <div className="grid grid-cols-3 gap-6">
 
         <div className="border rounded-xl p-6">
 
-          <h2>Pods</h2>
+          <h2>CPU Usage</h2>
 
           <p className="text-3xl font-bold">
 
-            {metrics.pods}
+            {metrics.cpu_usage}%
 
           </p>
 
@@ -84,11 +70,11 @@ export default function PrometheusPage() {
 
         <div className="border rounded-xl p-6">
 
-          <h2>Deployments</h2>
+          <h2>Memory Usage</h2>
 
           <p className="text-3xl font-bold">
 
-            {metrics.deployments}
+            {metrics.memory_usage}%
 
           </p>
 
@@ -111,5 +97,4 @@ export default function PrometheusPage() {
     </div>
 
   );
-
 }
