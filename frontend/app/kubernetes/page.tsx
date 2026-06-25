@@ -3,11 +3,8 @@
 import { useEffect, useState } from "react";
 
 import PageHeader from "@/components/shared/PageHeader";
-
 import SearchBox from "@/components/shared/SearchBox";
-
 import EmptyState from "@/components/shared/EmptyState";
-
 import PodsTable from "@/components/tables/PodsTable";
 
 import {
@@ -15,10 +12,18 @@ import {
   Pod,
 } from "@/services/pods";
 
+import {
+  getNamespaces,
+  Namespace,
+} from "@/services/namespaces";
+
 export default function KubernetesPage() {
 
   const [pods, setPods] =
     useState<Pod[]>([]);
+
+  const [namespaces, setNamespaces] =
+    useState<Namespace[]>([]);
 
   const [search, setSearch] =
     useState("");
@@ -42,7 +47,26 @@ export default function KubernetesPage() {
 
     }
 
+    async function loadNamespaces() {
+
+      try {
+
+        const data =
+          await getNamespaces();
+
+        setNamespaces(data);
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
     loadPods();
+
+    loadNamespaces();
 
   }, []);
 
@@ -53,13 +77,9 @@ export default function KubernetesPage() {
       (pod) =>
 
         pod.name
-
           .toLowerCase()
-
           .includes(
-
             search.toLowerCase()
-
           )
 
     );
@@ -72,7 +92,7 @@ export default function KubernetesPage() {
 
         title="Kubernetes"
 
-        subtitle="Pod Inventory"
+        subtitle="Cluster Inventory"
 
       />
 
@@ -84,33 +104,101 @@ export default function KubernetesPage() {
 
       />
 
-{
+      {/* Namespaces */}
 
-  filteredPods.length === 0
+      <div className="border rounded-xl p-6 shadow-sm">
 
-  ? (
+        <div className="flex items-center justify-between mb-5">
 
-    <EmptyState
+          <h2 className="text-xl font-bold">
 
-      title="No Pods Found"
+            ☸️ Namespaces
 
-      description="Try another search keyword."
+          </h2>
 
-    />
+          <span className="text-sm text-gray-500">
 
-  )
+            {namespaces.length} Total
 
-  : (
+          </span>
 
-    <PodsTable
+        </div>
 
-      pods={filteredPods}
+        <div className="flex flex-wrap gap-3">
 
-    />
+          {namespaces.map((namespace) => (
 
-  )
+            <div
 
-}
+              key={namespace.name}
+
+              className={`
+
+                px-4
+
+                py-2
+
+                rounded-full
+
+                text-sm
+
+                font-medium
+
+                transition
+
+                ${
+
+                  namespace.status === "Active"
+
+                    ? "bg-green-100 text-green-700"
+
+                    : "bg-red-100 text-red-700"
+
+                }
+
+              `}
+
+            >
+
+              ☸️ {namespace.name}
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </div>
+
+      {/* Pods */}
+
+      {
+
+        filteredPods.length === 0
+
+        ? (
+
+          <EmptyState
+
+            title="No Pods Found"
+
+            description="Try another search keyword."
+
+          />
+
+        )
+
+        : (
+
+          <PodsTable
+
+            pods={filteredPods}
+
+          />
+
+        )
+
+      }
 
     </div>
 

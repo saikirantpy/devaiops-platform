@@ -45,6 +45,26 @@ def get_pods():
 
     return pod_list
 
+def get_namespaces():
+
+    load_cluster_config()
+
+    v1 = client.CoreV1Api()
+
+    namespaces = v1.list_namespace()
+
+    namespace_list = []
+
+    for namespace in namespaces.items:
+
+        namespace_list.append(
+            {
+                "name": namespace.metadata.name,
+                "status": namespace.status.phase,
+            }
+        )
+
+    return namespace_list
 
 def get_deployments():
 
