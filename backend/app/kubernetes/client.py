@@ -45,6 +45,43 @@ def get_pods():
 
     return pod_list
 
+def get_pod(namespace: str, pod_name: str):
+
+    load_cluster_config()
+
+    v1 = client.CoreV1Api()
+
+    pod = v1.read_namespaced_pod(
+        name=pod_name,
+        namespace=namespace,
+    )
+
+    container = pod.spec.containers[0]
+
+    status = pod.status.container_statuses[0]
+
+    return {
+
+        "namespace": pod.metadata.namespace,
+
+        "name": pod.metadata.name,
+
+        "status": pod.status.phase,
+
+        "node": pod.spec.node_name,
+
+        "pod_ip": pod.status.pod_ip,
+
+        "host_ip": pod.status.host_ip,
+
+        "container": container.name,
+
+        "image": container.image,
+
+        "restart_count": status.restart_count,
+
+    }
+
 def get_namespaces():
 
     load_cluster_config()
@@ -315,4 +352,28 @@ def get_copilot_answer(question):
 
         "- What should I fix first?"
 
+    )
+
+def get_pod_logs(
+    namespace: str,
+    pod_name: str,
+):
+
+    load_cluster_config()
+
+    v1 = client.CoreV1Api()
+
+    pod = v1.read_namespaced_pod(
+        name=pod_name,
+        namespace=namespace,
+    )
+
+    # Select the main application container
+    container = pod.spec.containers[-1].name
+
+    return v1.read_namespaced_pod_log(
+        name=pod_name,
+        namespace=namespace,
+        container=container,
+        tail_lines=200,
     )

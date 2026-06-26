@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 
 import PageHeader from "@/components/shared/PageHeader";
 
+import Link from "next/link";
+
 import {
   getPodDetails,
   PodDetails,
@@ -172,12 +174,97 @@ export default function PodDetailsPage() {
         />
 
       </div>
+    <div className="border rounded-xl p-6">
 
+    <h2 className="text-xl font-bold">
+
+        Operations
+
+    </h2>
+
+    <p className="text-gray-500 mt-2">
+
+        Common Kubernetes operations for this pod.
+
+    </p>
+
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+
+<Link
+  href={`/pods/${details.namespace}/${details.name}/logs`}
+  className="
+    border
+    rounded-xl
+    p-4
+    hover:bg-gray-50
+    transition
+    block
+    text-center
+  "
+>
+  <div className="text-3xl">
+    📋
+  </div>
+
+  <div className="font-semibold mt-2">
+    View Logs
+  </div>
+</Link>
+
+        <button
+        className="
+            border
+            rounded-xl
+            p-4
+            hover:bg-gray-50
+            transition
+        "
+        >
+        📅
+        <div className="font-semibold mt-2">
+            Events
+        </div>
+        </button>
+
+        <button
+        className="
+            border
+            rounded-xl
+            p-4
+            hover:bg-gray-50
+            transition
+        "
+        >
+        📄
+        <div className="font-semibold mt-2">
+            YAML
+        </div>
+        </button>
+
+        <button
+        className="
+            border
+            rounded-xl
+            p-4
+            hover:bg-gray-50
+            transition
+        "
+        >
+        🤖
+        <div className="font-semibold mt-2">
+            AI Diagnose
+        </div>
+        </button>
+
+    </div>
+
+    </div>
     </div>
 
   );
 
 }
+
 
 function InfoCard({
 

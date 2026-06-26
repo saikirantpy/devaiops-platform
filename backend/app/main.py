@@ -8,7 +8,10 @@ from app.api.kubernetes import router as kubernetes_router
 from app.api.deployments import router as deployments_router
 from app.api.copilot import router as copilot_router
 from app.api.logs import router as logs_router
+
 from app.api.namespaces import router as namespaces_router
+from app.api.pod import router as pod_router
+
 from app.api.diagnostics import (
     router as diagnostics_router
 )
@@ -17,6 +20,7 @@ from app.api.prometheus import (
     router as prometheus_router
 )
 
+from app.api import pod_logs
 
 app = FastAPI(
     title="DevAIOps Platform"
@@ -68,6 +72,11 @@ app.include_router(
 )
 
 app.include_router(namespaces_router)
+app.include_router(pod_router)
+
+app.include_router(
+    pod_logs.router
+)
 
 @app.get("/")
 def root():
