@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useParams } from "next/navigation";
 
 import PageHeader from "@/components/shared/PageHeader";
@@ -10,15 +14,16 @@ import {
   PodLogsResponse,
 } from "@/services/podLogs";
 
+import PodLogsViewer from "@/components/podLogs/PodLogsViewer";
+import PodLogsToolbar from "@/components/podLogs/PodLogsToolbar";
+
 export default function PodLogsPage() {
 
   const params = useParams();
 
-  const namespace =
-    params.namespace as string;
+  const namespace = params.namespace as string;
 
-  const pod =
-    params.name as string;
+  const pod = params.name as string;
 
   const [logs, setLogs] =
     useState<PodLogsResponse | null>(null);
@@ -26,35 +31,45 @@ export default function PodLogsPage() {
   const [loading, setLoading] =
     useState(true);
 
-  useEffect(() => {
+  const [search, setSearch] =
+    useState("");
 
-    async function loadLogs() {
+  const refreshLogs = useCallback(
+    async () => {
+ 
+    try {
 
-      try {
+      setLoading(true);
 
-        const data =
-          await getPodLogs(
-            namespace,
-            pod
-          );
+      const data =
+        await getPodLogs(
+          namespace,
+          pod
+        );
 
-        setLogs(data);
+      setLogs(data);
 
-      } catch (error) {
+    } catch (error) {
 
-        console.error(error);
+      console.error(error);
 
-      } finally {
+    } finally {
 
-        setLoading(false);
-
-      }
+      setLoading(false);
 
     }
 
-    loadLogs();
+  
+  },
+  [namespace, pod]
+);
 
-  }, [namespace, pod]);
+useEffect(() => {
+
+  refreshLogs();
+
+}, [refreshLogs]);
+
 
   if (loading) {
 
@@ -85,18 +100,45 @@ export default function PodLogsPage() {
 
       <PageHeader
         title={pod}
-        subtitle="Pod Logs"
+        subtitle={`Logs for ${namespace}/${pod}`}
       />
 
-      <div className="border rounded-xl overflow-hidden">
+      <PodLogsToolbar
+        search={search}
+        setSearch={setSearch}
+        refresh={refreshLogs}
+      />
 
-        <div className="bg-gray-900 text-green-400 font-mono text-sm p-6 overflow-auto max-h-[700px] whitespace-pre-wrap">
+      <div className="border rounded-xl p-6">
 
-          {logs?.logs}
+        <h2 className="text-xl font-bold">
 
-        </div>
+          Pod Logs
+
+        </h2>
+
+        <p className="text-gray-500 mt-2">
+
+          Showing the latest logs from the Kubernetes pod.
+
+        </p>
 
       </div>
+
+      <PodLogsViewer
+        logs={
+          logs?.logs
+            .split("\n")
+            .filter((line) =>
+              line
+                .toLowerCase()
+                .includes(
+                  search.toLowerCase()
+                )
+            )
+            .join("\n") ?? ""
+        }
+      />
 
     </div>
 
