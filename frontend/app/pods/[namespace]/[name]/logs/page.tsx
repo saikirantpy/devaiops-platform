@@ -14,8 +14,12 @@ import {
   PodLogsResponse,
 } from "@/services/podLogs";
 
-import PodLogsViewer from "@/components/podLogs/PodLogsViewer";
-import PodLogsToolbar from "@/components/podLogs/PodLogsToolbar";
+import {
+  PodLogsToolbar,
+  PodLogsViewer,
+  PodLogsStats,
+  PodLogsActions,
+} from "@/components/podLogs";
 
 export default function PodLogsPage() {
 
@@ -33,7 +37,8 @@ export default function PodLogsPage() {
 
   const [search, setSearch] =
     useState("");
-
+  const [lastUpdated, setLastUpdated] =
+    useState("");
   const refreshLogs = useCallback(
     async () => {
  
@@ -48,7 +53,9 @@ export default function PodLogsPage() {
         );
 
       setLogs(data);
-
+      setLastUpdated(
+       new Date().toLocaleTimeString()
+      );
     } catch (error) {
 
       console.error(error);
@@ -71,8 +78,19 @@ useEffect(() => {
 }, [refreshLogs]);
 
 
-  if (loading) {
+  const allLines =
+    logs?.logs
+        .split("\n")
+        .filter(Boolean) ?? [];
 
+  const filteredLines =
+    allLines.filter((line) =>
+        line
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
+
+  if (loading) {
     return (
 
       <div className="space-y-8">
@@ -125,20 +143,20 @@ useEffect(() => {
 
       </div>
 
-      <PodLogsViewer
-        logs={
-          logs?.logs
-            .split("\n")
-            .filter((line) =>
-              line
-                .toLowerCase()
-                .includes(
-                  search.toLowerCase()
-                )
-            )
-            .join("\n") ?? ""
-        }
-      />
+        <PodLogsStats
+        totalLines={allLines.length}
+        filteredLines={filteredLines.length}
+        lastUpdated={lastUpdated}
+        />
+
+        <PodLogsViewer
+        logs={filteredLines.join("\n")}
+        />
+
+        <PodLogsActions
+        logs={logs?.logs ?? ""}
+        podName={pod}
+        />
 
     </div>
 
